@@ -15,16 +15,19 @@ app.use(morgan("dev"));
 
 // configuring cors with dynamic origin
 const whitelist = ["http://localhost:3000", "http://localhost:3303"];
+
 const corsOptionsDelegate = (req, callback) => {
   let corsOptions;
   if (whitelist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true, optionsSuccessStatus: 200 };
+    corsOptions = { origin: true };
   } else {
-    corsOptions = { origin: "Not allowed by CORS" };
+    corsOptions = { origin: "Not allowed by CORS" }; 
   }
   callback(null, corsOptions);
 };
-app.use(cors(corsOptionsDelegate));
+
+const corsOption = process.env.NODE_ENV === "development" ? null : corsOptionsDelegate;
+app.use(cors(corsOption));
 
 // routes
 app.get("/", (req, res) => {

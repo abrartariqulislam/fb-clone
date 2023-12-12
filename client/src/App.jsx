@@ -15,7 +15,6 @@ function App() {
 
   return (
     <div>
-      <i className="lifeEvent_icon"></i>
       <LiveVideo color={"green"} />
       <h1>Hello</h1>
       <h2>{state.name}</h2>

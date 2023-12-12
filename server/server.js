@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
+const fs = require("fs");
 dotenv.config();
 
 // app initialize
@@ -21,20 +22,18 @@ const corsOptionsDelegate = (req, callback) => {
   if (whitelist.indexOf(req.header("Origin")) !== -1) {
     corsOptions = { origin: true };
   } else {
-    corsOptions = { origin: "Not allowed by CORS" }; 
+    corsOptions = { origin: "Not allowed by CORS" };
   }
   callback(null, corsOptions);
 };
 
-const corsOption = process.env.NODE_ENV === "development" ? null : corsOptionsDelegate;
+const corsOption =
+  process.env.NODE_ENV === "development" ? null : corsOptionsDelegate;
 app.use(cors(corsOption));
 
 // routes
-app.get("/", (req, res) => {
-  console.log("called");
-  res.send({
-    name: "Tariqul Islam added from server",
-  });
+fs.readdirSync("./routes").map((routeFile) => {
+  app.use("/api/v1", require(`./routes/${routeFile}`));
 });
 
 // connect mongoose

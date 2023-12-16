@@ -1,11 +1,11 @@
 // dependencies
 const express = require("express");
-const { users } = require("../controllers/users");
+const { usersAll } = require("../controllers/users");
 
 // create route
 const router = express.Router();
 
 // route
-router.get("/users", users);
+router.get("/users", usersAll);
 
 module.exports = router;

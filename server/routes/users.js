@@ -1,11 +1,12 @@
 // dependencies
 const express = require("express");
-const { usersAll } = require("../controllers/users");
+const { register } = require("../controllers/users");
+const { registerDataValidationRules } = require("../middlewares/validators");
 
 // create route
 const router = express.Router();
 
 // route
-router.get("/users", usersAll);
+router.post("/register", registerDataValidationRules, register);
 
 module.exports = router;

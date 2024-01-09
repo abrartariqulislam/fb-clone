@@ -1,12 +1,11 @@
-const createHttpError = require("http-errors")
+const createHttpError = require("http-errors");
 
 // users controller
-exports.usersAll = async (req, res, next)=>{
-    try {
-        res.send("user route");
-    } catch(error){
-        next (createHttpError(error))
-    }
-}
-
-
+exports.register = (req, res, next) => {
+  try {
+    console.log(req.body);
+    res.send("register");
+  } catch (error) {
+    next(createHttpError(error));
+  }
+};

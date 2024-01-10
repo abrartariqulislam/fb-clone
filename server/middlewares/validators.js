@@ -1,5 +1,9 @@
 const { check } = require("express-validator");
-const { validateBirthYear, validateBirthMonth } = require("../utils/helpers");
+const {
+  validateBirthYear,
+  validateBirthMonth,
+  validateBirthDay,
+} = require("../utils/helpers");
 
 exports.registerDataValidationRules = [
   // full name
@@ -38,25 +42,50 @@ exports.registerDataValidationRules = [
     .isStrongPassword()
     .withMessage("Password is not strong!"),
 
-    // birth_year
-    check("birth_year")
+  // birth_year
+  check("birth_year")
     .trim()
     .escape()
     .notEmpty()
     .withMessage("Birth year is required!")
-    .custom((birthYear)=>{
-      return validateBirthYear(birthYear)
+    .custom((birth_year) => {
+      return validateBirthYear(birth_year);
     })
     .withMessage("Invalid birth year!"),
 
-    // birth_month
-    check("birth_month")
+  // birth_month
+  check("birth_month")
     .trim()
     .escape()
     .notEmpty()
     .withMessage("Birth month is required!")
-    .custom((birthMonth)=>{
-      return validateBirthMonth(birthMonth)
+    .custom((birth_month) => {
+      return validateBirthMonth(birth_month);
     })
     .withMessage("Invalid birth month!"),
+
+  // birth_day
+  check("birth_day")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Birth day is required!")
+    .custom((birth_day, { req }) => {
+      const { birth_year, birth_month } = req.body;
+      return validateBirthDay(birth_year, birth_month, birth_day);
+    })
+    .withMessage("Invalid birth day!"),
+
+  // gender
+  check("gender")
+    .notEmpty()
+    .withMessage("Gender is required!")
+    .custom((gender) => {
+      const genders = ["male", "female", "others"];
+      if (genders.includes(gender)) {
+        return true;
+      }
+      return false;
+    })
+    .withMessage("Invalid gender"),
 ];

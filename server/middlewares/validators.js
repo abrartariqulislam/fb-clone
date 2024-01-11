@@ -1,4 +1,4 @@
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const {
   validateBirthYear,
   validateBirthMonth,
@@ -89,3 +89,17 @@ exports.registerDataValidationRules = [
     })
     .withMessage("Invalid gender"),
 ];
+
+
+exports.registerDataValidationResult = (req, res, next)=>{
+  const errors = validationResult(req)
+  if(errors.isEmpty()) {
+    next()
+  }else{
+    const errorEntries = Object.entries(errors.mapped())
+    const formattedErrors = errorEntries.map(([key, value])=>{
+      return {[key]: value.msg}
+    })
+    res.send(formattedErrors)
+  }
+}

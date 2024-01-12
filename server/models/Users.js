@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema(
       required: [true, "Last name is required!"],
       trim: true,
     },
-    user_name: {
+    username: {
       type: String,
       required: [true, "User name is required!"],
       unique: true,

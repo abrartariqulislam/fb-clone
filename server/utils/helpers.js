@@ -1,3 +1,6 @@
+const Users = require("../models/Users");
+
+
 // birth year validator
 exports.validateBirthYear = (birthYear) => {
   // get current year
@@ -52,3 +55,17 @@ exports.validateBirthDay = (birthYear, birthMonth, birthDay) => {
   // birth day  is valid
   return true;
 };
+
+// create dynamic username
+exports.createUsername = async (username)=>{
+let check = false
+do {
+  const user = await Users.find({username,})
+  if(user){
+    username += Math.floor(Math.random() * 9 +1)
+    return check = true
+  }
+} while (check);
+
+return username
+}

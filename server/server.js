@@ -42,7 +42,7 @@ mongoose
   .then(() => {
     console.log("Connected mongoDB database");
   })
-  .catch((err) => console.log("Error connect to mongoDB"));
+  .catch((err) => console.log("Error to connected mongoDB"));
 
 // connect server
 const port = process.env.PORT || 8000;

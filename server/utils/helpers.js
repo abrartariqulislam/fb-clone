@@ -57,15 +57,17 @@ exports.validateBirthDay = (birthYear, birthMonth, birthDay) => {
 };
 
 // create dynamic username
-exports.createUsername = async (username)=>{
-let check = false
+exports.validateUsername = async (username)=>{
+let result = false
 do {
-  const user = await Users.find({username,})
-  if(user){
+  const check = await Users.findOne({username})
+  if(check){
     username += Math.floor(Math.random() * 9 +1)
-    return check = true
+    result = true
+  }else{
+    result = false
   }
-} while (check);
+} while (result);
 
 return username
 }

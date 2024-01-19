@@ -1,5 +1,6 @@
 const Users = require("../models/Users");
-
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 // birth year validator
 exports.validateBirthYear = (birthYear) => {
@@ -57,17 +58,22 @@ exports.validateBirthDay = (birthYear, birthMonth, birthDay) => {
 };
 
 // create dynamic username
-exports.validateUsername = async (username)=>{
-let result = false
-do {
-  const check = await Users.findOne({username})
-  if(check){
-    username += Math.floor(Math.random() * 9 +1)
-    result = true
-  }else{
-    result = false
-  }
-} while (result);
+exports.validateUsername = async (username) => {
+  let result = false;
+  do {
+    const check = await Users.findOne({ username });
+    if (check) {
+      username += Math.floor(Math.random() * 9 + 1);
+      result = true;
+    } else {
+      result = false;
+    }
+  } while (result);
 
-return username
-}
+  return username;
+};
+
+// generate token
+exports.generateToken = (payload, expireIn) => {
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: expireIn });
+};

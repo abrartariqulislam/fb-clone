@@ -1,6 +1,6 @@
 const createHttpError = require("http-errors");
 const bcrypt = require("bcrypt");
-const { validateUsername } = require("../utils/helpers");
+const { validateUsername, generateToken } = require("../utils/helpers");
 const Users = require("../models/Users");
 
 // users controller
@@ -30,6 +30,12 @@ exports.register = async (req, res, next) => {
       birth_month,
       birth_day,
     }).save();
+
+    const emailVerificationToken = generateToken(
+      { id: user._id.toString() },
+      "30m"
+    );
+    const authToken = generateToken({ id: user._id.toString() }, "7d");
 
     user.password = undefined;
 

@@ -31,7 +31,8 @@ const userSchema = mongoose.Schema(
     picture: {
       type: String,
       trim: true,
-      default: "",
+      default:
+        "https://res-console.cloudinary.com/deyctfxfd/media_explorer_thumbnails/6bd01dc9693ce0f24c2ccaa42adb7f00/detaileds",
     },
     cover: {
       type: String,

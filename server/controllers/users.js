@@ -2,6 +2,7 @@ const createHttpError = require("http-errors");
 const bcrypt = require("bcrypt");
 const { validateUsername, generateToken } = require("../utils/helpers");
 const Users = require("../models/Users");
+const { generateEmailTemplate } = require("../utils/emailTemplate");
 
 // users controller
 exports.register = async (req, res, next) => {
@@ -36,6 +37,9 @@ exports.register = async (req, res, next) => {
       "30m"
     );
     const authToken = generateToken({ id: user._id.toString() }, "7d");
+
+    const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`
+    const html = generateEmailTemplate(user.username, url)
 
     user.password = undefined;
 

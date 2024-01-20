@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { validateUsername, generateToken } = require("../utils/helpers");
 const Users = require("../models/Users");
 const { generateEmailTemplate } = require("../utils/emailTemplate");
+const { mailer } = require("../utils/mailer");
 
 // users controller
 exports.register = async (req, res, next) => {
@@ -38,15 +39,24 @@ exports.register = async (req, res, next) => {
     );
     const authToken = generateToken({ id: user._id.toString() }, "7d");
 
-    const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`
-    const html = generateEmailTemplate(user.username, url)
+    const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
+    const html = generateEmailTemplate(user.username, url);
 
     user.password = undefined;
 
     res.status(201).send({
       massage: "Registration was successfully ",
       user,
+      token: authToken,
     });
+
+    const emailData = {
+      subject: `Facebook email verification - ${new Date().toDateString()} `,
+      html: html,
+      attachments: [],
+    };
+
+    await mailer([user.email], emailData);
   } catch (error) {
     next(createHttpError(error));
   }
